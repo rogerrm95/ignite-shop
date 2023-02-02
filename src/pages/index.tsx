@@ -1,14 +1,10 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Stripe from 'stripe'
 import { stripe } from '../lib/stripe'
 
 import { HomeContainer, Product } from '../styles/pages/home'
-
-import Shirt1 from '../assets/1.png'
-import Shirt2 from '../assets/2.png'
-import Shirt3 from '../assets/3.png'
 
 import { useKeenSlider } from 'keen-slider/react'
 import 'keen-slider/keen-slider.min.css'
@@ -59,7 +55,7 @@ export default function Home({ products }: HomeProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
 
   const response = await stripe.products.list({
     expand: ['data.default_price']
@@ -80,6 +76,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       products
-    }
+    },
+    revalidate: 60 * 60 // Em segundos - 1 hora //
   }
 }
+
+// getStaticProps: não possui acesso ao contexto da requisição (req, res, params etc...) //
+// getServerSideProps: possui acesso ao contexto da requisição (req, res, params etc...) //
