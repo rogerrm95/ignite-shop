@@ -1,5 +1,5 @@
 import { ImageContainer, ProductContainer, ProductDetails } from "@/src/styles/pages/product"
-import { GetStaticProps } from "next"
+import { GetStaticPaths, GetStaticProps } from "next"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import Stripe from "stripe"
@@ -42,29 +42,51 @@ export default function Product({ product }: ProductProps) {
     )
 }
 
-export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ params }) => {
-    const productId = params.id
-
-    const product = await stripe.products.retrieve(productId, {
-        expand: ['default_price']
-    })
-
-    const price = product.default_price as Stripe.Price
-    const priceFormatted = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    }).format(price.unit_amount ? (price.unit_amount / 100) : 0)
-
+// GET STATIC PATH //
+// Utilizando quando uma página possue algum parâmetro a ser recebido //
+// Ex: ID do produto //
+export const getStaticPaths: GetStaticPaths = async () => {
     return {
-        props: {
-            product: {
-                id: product.id,
-                name: product.name,
-                imageUrl: product.images[0],
-                price: priceFormatted, // Salvar preços em centavos //
-                description: product.description
-            }
-        },
-        revalidate: 60 * 60 * 1,
+        paths: [
+            { params: { id: 'prod_NEnYsfsf5m9DkQ' } }
+        ],
+        fallback: false
     }
 }
+
+export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ params }) => {
+    if (params?.id) {
+        const productId = params.id
+
+        const product = await stripe.products.retrieve(productId, {
+            expand: ['default_price']
+        })
+
+        const price = product.default_price as Stripe.Price
+        const priceFormatted = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(price.unit_amount ? (price.unit_amount / 100) : 0)
+
+        return {
+            props: {
+                product: {
+                    id: product.id,
+                    name: product.name,
+                    imageUrl: product.images[0],
+                    price: priceFormatted, // Salvar preços em centavos //
+                    description: product.description
+                }
+            },
+            revalidate: 60 * 60 * 1,
+        }
+    } else {
+        return {
+            props: {
+
+            },
+            revalidate: 60 * 60 * 1,
+        }
+    }
+}
+
