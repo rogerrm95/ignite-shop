@@ -18,7 +18,11 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
-    const { query } = useRouter()
+    const { query, isFallback } = useRouter()
+
+    if(isFallback) {
+        return <p>Loading...</p>
+    }
 
     return (
         <ProductContainer>
@@ -46,11 +50,13 @@ export default function Product({ product }: ProductProps) {
 // Utilizando quando uma página possue algum parâmetro a ser recebido //
 // Ex: ID do produto //
 export const getStaticPaths: GetStaticPaths = async () => {
+    // Buscar os produtos mais vendidos / mais vendidos //
+
     return {
         paths: [
             { params: { id: 'prod_NEnYsfsf5m9DkQ' } }
         ],
-        fallback: false
+        fallback: true // false or blocking //
     }
 }
 
