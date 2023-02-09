@@ -6,6 +6,9 @@ import Stripe from "stripe"
 
 import { stripe } from '../../lib/stripe'
 
+import axios from 'axios'
+import { useState } from "react"
+
 
 interface ProductProps {
     product: {
@@ -21,8 +24,27 @@ interface ProductProps {
 export default function Product({ product }: ProductProps) {
     const { isFallback } = useRouter()
 
-    function handleBuyProduct() {
-        console.log(product.defaultPriceId)
+    const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+
+    async function handleBuyProduct() {
+        try {
+            setIsCreatingCheckoutSession(true)
+
+            const response = await axios.post('/api/checkout', {
+                priceId: product.defaultPriceId
+            })
+
+            const { checkoutUrl } = response.data
+
+            window.location.href = checkoutUrl
+
+
+        } catch (error) {
+            // Conectar com alguma ferramenta de observabilidade (datadog / Sentry) //
+
+            setIsCreatingCheckoutSession(false)
+            alert('Falha ao redirecionar ao checkout')
+        }
     }
 
     if (isFallback) {
@@ -45,17 +67,16 @@ export default function Product({ product }: ProductProps) {
                     {product.description}
                 </p>
 
-                <button onClick={handleBuyProduct}>
-                    Comprar agora
+                <button onClick={handleBuyProduct} disabled={isCreatingCheckoutSession}>
+                    {
+                        isCreatingCheckoutSession ? '...' : 'Comprar agora'
+                    }
                 </button>
             </ProductDetails>
         </ProductContainer>
     )
 }
 
-// GET STATIC PATH //
-// Utilizando quando uma página possue algum parâmetro a ser recebido //
-// Ex: ID do produto //
 export const getStaticPaths: GetStaticPaths = async () => {
     // Buscar os produtos mais vendidos / mais vendidos //
 
@@ -104,3 +125,19 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
     }
 }
 
+// ANOTAÇÕES //
+
+/*
+* Exemplo para rota interna * 
+    const router = useRouter()
+    router.push('/checkout') 
+
+* Exemplo para rota externa *
+    window.location.href = checkoutUrl // rota externa //
+*/
+
+/*
+// GET STATIC PATH //
+// Utilizado quando uma página possui algum parâmetro a ser recebido //
+// Ex: ID do produto //
+*/

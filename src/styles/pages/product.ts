@@ -22,7 +22,7 @@ export const ImageContainer = styled('div', {
     display: "flex",
     alignItems: "center",
     justifyContent: 'center',
-    
+
     img: {
         objectFit: 'cover'
     }
@@ -64,6 +64,15 @@ export const ProductDetails = styled('div', {
         borderRadius: 8,
 
         '&:hover': {
+            backgroundColor: '$green300'
+        },
+
+        "&:disabled": {
+            opacity: 0.6,
+            cursor: 'not-allowed'
+        },
+
+        '&:not(:disabled):hover': {
             backgroundColor: '$green300'
         }
     }

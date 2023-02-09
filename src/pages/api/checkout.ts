@@ -3,8 +3,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // API Routes //
-    // 
-    const priceId = 'price_1MUJwzBp865hGTTEEmv2Kuuh'
+    const { priceId } = req.body
+
+    if (req.method !== 'POST') {
+        return res.status(500).json({ error: 'Method not allowed.' })
+    }
+
+    if (!priceId) {
+        return res.status(400).json({ error: 'Price not found.' })
+    }
 
     const successUrl = `${process.env.NEXT_URL}/success`
     const cancelUrl = `${process.env.NEXT_URL}/`
