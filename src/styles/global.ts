@@ -25,5 +25,18 @@ export const GlobalStyles = globalCss({
         cursor: 'pointer',
 
         fontSize: '1rem'
+    },
+
+    '::-webkit-scrollbar': {
+        width: '5px'
+    },
+
+    '::-webkit-scrollbar-track ': {
+        backgroundColor: '$gray900',
+        borderRadius: 99
+    },
+
+    '::-webkit-scrollbar-thumb ': {
+        backgroundColor: '$green500',
     }
 })

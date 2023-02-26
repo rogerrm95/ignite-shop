@@ -25,7 +25,19 @@ export const ModalContent = styled(Modal.Content, {
 
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+
+    ul: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.25rem',
+
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        height: '100%',
+        marginBottom: '1rem'
+    }
+
 })
 
 export const ModalTitle = styled(Modal.Title, {
@@ -85,10 +97,65 @@ export const ImageContainer = styled('div', {
     objectFit: 'cover',
 })
 
-// ... //
-export const Summary = styled('div', {
-    
-})
-export const FinishBuyButton = styled('button', {
+export const Summary = styled('footer', {
+    marginTop: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.5rem',
 
+    div: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+
+    "#amount": {
+        color: '$gray300',
+
+        'span + span': {
+            fontSize: '$md'
+        }
+    },
+
+    "#total": {
+        fontWeight: 'bold',
+        fontSize: '$md',
+        color: '$gray100',
+
+        'span + span': {
+            fontSize: '$xl'
+        }
+    }
+})
+export const CheckoutButton = styled('button', {
+    marginTop: '3.5rem',
+
+    backgroundColor: '$green300',
+    color: '$white',
+    borderRadius: '8px',
+    padding: '2rem 1.25rem',
+
+    fontSize: '$md',
+    fontWeight: 'bold',
+
+    transition: 'all 0.3s',
+
+    "&:hover": {
+        backgroundColor: '$green500',
+    }
+})
+
+export const CloseButton = styled(Modal.Close, {
+    position: 'absolute',
+    top: '1.5rem',
+    right: '1.5rem',
+
+    color: '$gray500',
+
+    transition: 'all 0.5s',
+
+    "&:hover": {
+        opacity: 0.6,
+        transform:'rotate(90deg)'
+    }
 })
