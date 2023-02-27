@@ -33,6 +33,26 @@ export const SuccessContainer = styled('main', {
         "&:hover": {
             color: '$green300'
         }
+    },
+
+    ul: {
+        display: 'flex',
+    },
+
+    // When has +3 more items //
+    ".must3items div:last-of-type::after": {
+        content: '+3',
+        width: '100%',
+        height: '100%',
+        backgroundColor: '$gray800',
+        opacity: 0.75,
+
+        position: 'absolute',
+
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '$xl'
     }
 })
 
@@ -42,7 +62,8 @@ export const ImageContainer = styled('div', {
     height: 145,
 
     background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
-    borderRadius: 8,
+    boxShadow: '0px 0px 60px rgba(0, 0, 0, 0.8)',
+    borderRadius: '50%',
     padding: '0.25rem',
     display: 'flex',
     alignItems: 'center',
@@ -50,4 +71,11 @@ export const ImageContainer = styled('div', {
     objectFit: 'cover',
 
     marginTop: '4rem',
+    overflow: 'hidden',
+
+    position: 'relative',
+    
+    "&:not(:first-of-type)": {
+        marginLeft: '-2rem',
+    },
 })

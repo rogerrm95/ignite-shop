@@ -75,7 +75,7 @@ export default function Product({ product }: ProductProps) {
 
                     <button onClick={handleBuyProduct} disabled={isCreatingCheckoutSession}>
                         {
-                            isCreatingCheckoutSession ? '...' : 'Comprar agora'
+                            isCreatingCheckoutSession ? '...' : 'Colocar na sacola'
                         }
                     </button>
                 </ProductDetails>
@@ -89,9 +89,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     return {
         paths: [
-            { params: { id: 'prod_NEnYsfsf5m9DkQ' } }
+            { params: { id: 'price_1MUJwzBp865hGTTEEmv2Kuuh' } }
         ],
-        fallback: true // false or blocking //
+        fallback: 'blocking' // false or blocking //
     }
 }
 

@@ -29,13 +29,23 @@ export default function Success({ customerName, product }: SuccessProps) {
                 <h1>Compra efetuada!</h1>
 
 
-                <ImageContainer>
-                    <Image src={product.imageUrl} alt='' width={120} height={110} />
-                </ImageContainer>
+                <ul className="must3items">
+                    <ImageContainer>
+                        <Image src={product.imageUrl} alt='' width={120} height={110} />
+                    </ImageContainer>
+
+                    <ImageContainer>
+                        <Image src={product.imageUrl} alt='' width={120} height={110} />
+                    </ImageContainer>
+
+                    <ImageContainer>
+                        <Image src={product.imageUrl} alt='' width={120} height={110} />
+                    </ImageContainer>
+                </ul>
 
                 <p>
                     Uhuul, <strong>{customerName}</strong>,
-                    sua compra de <strong>{product.name}</strong> já está a caminho da sua casa.
+                    sua compra de <strong>3</strong> camisetas já estão a caminho da sua casa.
                 </p>
 
                 <Link href="/">
