@@ -133,7 +133,7 @@ export const CheckoutButton = styled('button', {
     backgroundColor: '$green300',
     color: '$white',
     borderRadius: '8px',
-    padding: '2rem 1.25rem',
+    padding: '1.25rem 2rem',
 
     fontSize: '$md',
     fontWeight: 'bold',
