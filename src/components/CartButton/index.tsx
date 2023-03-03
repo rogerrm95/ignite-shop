@@ -3,20 +3,21 @@ import { Container } from "./styles";
 
 import Dialog from '@radix-ui/react-dialog'
 import { ButtonHTMLAttributes } from "react";
+import { useShoppingCart } from "@/src/hooks/useShoppingCart";
 
-interface CartButtonProps extends ButtonHTMLAttributes<HTMLElement> {
-    amount: number
-}
+interface CartButtonProps extends ButtonHTMLAttributes<HTMLElement> { }
 
-export function CartButton({ amount, ...rest }: CartButtonProps) {
+export function CartButton({ ...rest }: CartButtonProps) {
+    const { cart } = useShoppingCart()
+
     return (
         <Container {...rest}>
             <Handbag size={24} weight='bold' />
 
             {
-                amount > 0 && (
+                cart.length > 0 && (
                     <span>
-                        {amount}
+                        {cart.length}
                     </span>
                 )
             }

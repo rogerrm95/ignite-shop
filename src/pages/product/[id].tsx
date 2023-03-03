@@ -9,6 +9,7 @@ import { stripe } from '../../lib/stripe'
 import axios from 'axios'
 import { useState } from "react"
 import Head from "next/head"
+import { useShoppingCart } from "@/src/hooks/useShoppingCart"
 
 
 interface ProductProps {
@@ -16,7 +17,8 @@ interface ProductProps {
         id: string,
         name: string,
         imageUrl: string,
-        price: string,
+        price: number,
+        priceFormatted: string,
         description: string,
         defaultPriceId: string
     }
@@ -24,28 +26,31 @@ interface ProductProps {
 
 export default function Product({ product }: ProductProps) {
     const { isFallback } = useRouter()
+    const { addItemToShoppingCart } = useShoppingCart()
 
     const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
 
     async function handleBuyProduct() {
-        try {
-            setIsCreatingCheckoutSession(true)
 
-            const response = await axios.post('/api/checkout', {
-                priceId: product.defaultPriceId
-            })
+        addItemToShoppingCart({ amount: 1, data: product })
+        // try {
+        //     setIsCreatingCheckoutSession(true)
 
-            const { checkoutUrl } = response.data
+        //     const response = await axios.post('/api/checkout', {
+        //         priceId: product.defaultPriceId
+        //     })
 
-            window.location.href = checkoutUrl
+        //     const { checkoutUrl } = response.data
+
+        //     window.location.href = checkoutUrl
 
 
-        } catch (error) {
-            // Conectar com alguma ferramenta de observabilidade (datadog / Sentry) //
+        // } catch (error) {
+        //     // Conectar com alguma ferramenta de observabilidade (datadog / Sentry) //
 
-            setIsCreatingCheckoutSession(false)
-            alert('Falha ao redirecionar ao checkout')
-        }
+        //     setIsCreatingCheckoutSession(false)
+        //     alert('Falha ao redirecionar ao checkout')
+        // }
     }
 
     if (isFallback) {
@@ -67,7 +72,7 @@ export default function Product({ product }: ProductProps) {
                 <ProductDetails>
                     <h1>{product.name}</h1>
 
-                    <span>{product.price}</span>
+                    <span>{product.priceFormatted}</span>
 
                     <p>
                         {product.description}
@@ -115,7 +120,8 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
                     id: product.id,
                     name: product.name,
                     imageUrl: product.images[0],
-                    price: priceFormatted, // Salvar preços em centavos //
+                    price: price.unit_amount ? price.unit_amount / 100 : 0,
+                    priceFormatted, // Salvar preços em centavos //
                     description: product.description,
                     defaultPriceId: price.id
                 }

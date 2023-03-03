@@ -10,29 +10,29 @@ import { CartButton } from '../components/CartButton'
 import logoImg from '../assets/logo.svg'
 import { Container, Header } from '../styles/pages/app'
 import { CartModal } from '../components/CartModal'
+import { ShoppingCartContextProvider } from '../contexts/ShoppingCartContext'
 
 GlobalStyles()
-
-const AMOUNT = 99 // TESTE //
 
 export default function App({ Component, pageProps }: AppProps) {
 
   return (
-    <Container>
-      <Header>
-        <Image src={logoImg} alt="" />
+    <ShoppingCartContextProvider>
+      <Container>
+        <Header>
+          <Image src={logoImg} alt="" />
 
+          <Modal.Root>
+            <Modal.Trigger asChild>
+              <CartButton />
+            </Modal.Trigger>
 
-        <Modal.Root>
-          <Modal.Trigger asChild>
-            <CartButton amount={AMOUNT} />
-          </Modal.Trigger>
+            <CartModal />
+          </Modal.Root>
+        </Header>
 
-          <CartModal />
-        </Modal.Root>
-      </Header>
-
-      <Component {...pageProps} />
-    </Container>
+        <Component {...pageProps} />
+      </Container>
+    </ShoppingCartContextProvider>
   )
 }
