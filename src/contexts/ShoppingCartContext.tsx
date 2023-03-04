@@ -44,7 +44,7 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
     useEffect(() => {
         if (cart.length >= 0) {
             const total = cart.reduce((total, item) => {
-                return total + Number(item.data.price)
+                return total + (item.amount * Number(item.data.price))
             }, 0)
 
             const totalFormatted = new Intl.NumberFormat('pt-BR', {
@@ -67,7 +67,7 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
             const newList = cart.map(item => {
                 return item.data.id === product.data.id ? {
                     ...product,
-                    amount: product.amount + 1
+                    amount: item.amount + 1
                 } : item
             })
 

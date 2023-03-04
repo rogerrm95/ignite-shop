@@ -62,11 +62,18 @@ export const CartShopItem = styled('div', {
             color: 'gray300'
         },
 
-        span: {
+        'p + p': {
             fontSize: '$md',
             fontWeight: 'bold',
             lineHeight: '160%',
             color: 'gray100',
+        },
+
+        span: {
+            marginLeft: '1.5rem',
+            fontSize: "1rem",
+            fontWeight: 'normal',
+            color: "$gray500"
         },
 
         button: {
@@ -161,6 +168,6 @@ export const CloseButton = styled(Modal.Close, {
 
     "&:hover": {
         opacity: 0.6,
-        transform:'rotate(90deg)'
+        transform: 'rotate(90deg)'
     }
 })

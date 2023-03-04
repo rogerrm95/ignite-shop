@@ -66,7 +66,10 @@ export function CartModal() {
                                 <div>
                                     <p>{item.data.name}</p>
 
-                                    <span>{item.data.priceFormatted}</span>
+                                    <p>
+                                        {item.data.priceFormatted}
+                                        <span>{`Qtd: ${item.amount}`}</span>
+                                    </p>
 
                                     <button onClick={() => handleRemoveItemToShoppingCart(item.data.id)}>
                                         Remover
