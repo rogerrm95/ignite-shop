@@ -1,21 +1,48 @@
+import { useEffect, useState } from "react";
+// NEXT //
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
-
 import Link from "next/link";
+// Hooks //
+import { useShoppingCart } from "../hooks/useShoppingCart";
+// Stripe //
 import Stripe from "stripe";
 import { stripe } from "../lib/stripe";
+// Styles //
 import { SuccessContainer, ImageContainer } from "../styles/pages/success";
 
 interface SuccessProps {
     customerName: string,
-    product: {
-        name: string,
-        imageUrl: string
-    }
+    products: Product[]
 }
 
-export default function Success({ customerName, product }: SuccessProps) {
+type Product = {
+    name: string,
+    imageUrl: string
+}
+
+export default function Success({ customerName, products }: SuccessProps) {
+    const [productListWithThreeItems, setProductListWithThreeItems] = useState([] as Product[])
+
+    const { clearShoppingCart } = useShoppingCart()
+
+    useEffect(() => {
+        clearShoppingCart()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    // Verifica o tamanho do array //
+    // Caso o array for maior que 3, pega apenas os 3 primeiros items para exibir //
+    useEffect(() => {
+        const productsArrayLength = products.length
+
+        const newProductList = productsArrayLength > 3 ? products.slice(0, 3) : products
+
+        setProductListWithThreeItems(newProductList)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <>
             <Head>
@@ -28,24 +55,21 @@ export default function Success({ customerName, product }: SuccessProps) {
             <SuccessContainer>
                 <h1>Compra efetuada!</h1>
 
-
-                <ul className="must3items">
-                    <ImageContainer>
-                        <Image src={product.imageUrl} alt='' width={120} height={110} />
-                    </ImageContainer>
-
-                    <ImageContainer>
-                        <Image src={product.imageUrl} alt='' width={120} height={110} />
-                    </ImageContainer>
-
-                    <ImageContainer>
-                        <Image src={product.imageUrl} alt='' width={120} height={110} />
-                    </ImageContainer>
+                <ul className={`${products.length > 3 ? 'must3items' : ''}`}>
+                    {
+                        productListWithThreeItems.map(item => (
+                            <ImageContainer key={item.name}>
+                                <Image src={item.imageUrl[0]} alt='' width={120} height={110} title={item.name} />
+                            </ImageContainer>
+                        ))
+                    }
                 </ul>
 
                 <p>
                     Uhuul, <strong>{customerName}</strong>,
-                    sua compra de <strong>3</strong> camisetas já estão a caminho da sua casa.
+                    sua compra de
+                    <strong>{` ${products.length} `}</strong>
+                    camisetas já estão a caminho da sua casa.
                 </p>
 
                 <Link href="/">
@@ -74,15 +98,23 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     })
 
     const customerName = session.customer_details?.name
-    const product = session.line_items?.data[0].price?.product as Stripe.Product
+
+    // Lista de produtos //
+    // Map com as info: images e name//
+    const productsList = session.line_items?.data
+
+    const products = productsList ? productsList.map(item => {
+        const product = item.price?.product as Stripe.Product
+        return {
+            name: product.name,
+            imageUrl: product.images
+        }
+    }) : []
 
     return {
         props: {
             customerName,
-            product: {
-                name: product.name,
-                imageUrl: product.images[0]
-            }
+            products
         }
     }
 }

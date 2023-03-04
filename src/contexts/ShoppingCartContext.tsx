@@ -42,7 +42,7 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
 
     //CALCULA O VALOR TOTAL E CONVERTE PARA REAL R$//
     useEffect(() => {
-        if (cart.length > 0) {
+        if (cart.length >= 0) {
             const total = cart.reduce((total, item) => {
                 return total + Number(item.data.price)
             }, 0)
@@ -72,6 +72,7 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
 
     function clearShoppingCart() {
         setCart([] as Product[])
+        setCost('R$ 0,00')
         localStorage.clear()
     }
 

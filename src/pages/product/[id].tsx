@@ -28,29 +28,8 @@ export default function Product({ product }: ProductProps) {
     const { isFallback } = useRouter()
     const { addItemToShoppingCart } = useShoppingCart()
 
-    const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
-
-    async function handleBuyProduct() {
-
+    function handleAddItemToShoppingCart() {
         addItemToShoppingCart({ amount: 1, data: product })
-        // try {
-        //     setIsCreatingCheckoutSession(true)
-
-        //     const response = await axios.post('/api/checkout', {
-        //         priceId: product.defaultPriceId
-        //     })
-
-        //     const { checkoutUrl } = response.data
-
-        //     window.location.href = checkoutUrl
-
-
-        // } catch (error) {
-        //     // Conectar com alguma ferramenta de observabilidade (datadog / Sentry) //
-
-        //     setIsCreatingCheckoutSession(false)
-        //     alert('Falha ao redirecionar ao checkout')
-        // }
     }
 
     if (isFallback) {
@@ -78,10 +57,8 @@ export default function Product({ product }: ProductProps) {
                         {product.description}
                     </p>
 
-                    <button onClick={handleBuyProduct} disabled={isCreatingCheckoutSession}>
-                        {
-                            isCreatingCheckoutSession ? '...' : 'Colocar na sacola'
-                        }
+                    <button onClick={handleAddItemToShoppingCart}>
+                        Colocar na sacola
                     </button>
                 </ProductDetails>
             </ProductContainer>

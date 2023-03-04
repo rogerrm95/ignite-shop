@@ -142,7 +142,12 @@ export const CheckoutButton = styled('button', {
 
     "&:hover": {
         backgroundColor: '$green500',
-    }
+    },
+
+    "&:disabled": {
+        opacity: 0.6,
+        cursor: 'not-allowed'
+    },
 })
 
 export const CloseButton = styled(Modal.Close, {

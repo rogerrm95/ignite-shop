@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import * as Modal from '@radix-ui/react-dialog'
 import Image from 'next/image';
 // HOOKS //
@@ -7,12 +8,40 @@ import { FiX } from 'react-icons/fi'
 import tshirt from '../../assets/1.png'
 
 import { CartShopItem, CheckoutButton, CloseButton, ImageContainer, ModalContent, ModalOverlay, ModalTitle, Summary } from "./styles";
+import axios from 'axios';
 
 export function CartModal() {
     const { cost, cart, removeItemToShoppingCart } = useShoppingCart()
 
+    const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+
     function handleRemoveItemToShoppingCart(productId: string) {
         removeItemToShoppingCart(productId)
+    }
+
+    async function handleBuyProducts() {
+        try {
+            setIsCreatingCheckoutSession(true)
+
+            // Lista dos price ID dos produtos //
+            const priceIdList = cart.map(item => {
+                return {
+                    price: item.data.defaultPriceId,
+                    quantity: item.amount
+                }
+            })
+
+            const response = await axios.post('/api/checkout', priceIdList)
+
+            const { checkoutUrl } = response.data
+
+            window.location.href = checkoutUrl
+        } catch (error) {
+            // Conectar com alguma ferramenta de observabilidade (datadog / Sentry) //
+
+            setIsCreatingCheckoutSession(false)
+            alert('Falha ao redirecionar ao checkout')
+        }
     }
 
     return (
@@ -59,8 +88,10 @@ export function CartModal() {
                         <span>{cost}</span>
                     </div>
 
-                    <CheckoutButton>
-                        Finalizar compra
+                    <CheckoutButton onClick={handleBuyProducts} disabled={isCreatingCheckoutSession}>
+                        {
+                            isCreatingCheckoutSession ? '...' : 'Finalizar compra'
+                        }
                     </CheckoutButton>
                 </Summary>
 
