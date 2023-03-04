@@ -57,10 +57,23 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
     }, [cart])
 
     function addItemToShoppingCart(product: Product) {
-        const newShoppingCartList = [...cart, product]
+        const hasProductInTheCart = cart.findIndex(item => item.data.id === product.data.id)
 
-        setCart(newShoppingCartList)
-        localStorage.setItem('@ignite-shop:cart', JSON.stringify(newShoppingCartList))
+        if (hasProductInTheCart < 0) {
+            const newList = [...cart, product]
+            setCart(newList)
+            localStorage.setItem('@ignite-shop:cart', JSON.stringify(newList))
+        } else {
+            const newList = cart.map(item => {
+                return item.data.id === product.data.id ? {
+                    ...product,
+                    amount: product.amount + 1
+                } : item
+            })
+
+            setCart(newList)
+            localStorage.setItem('@ignite-shop:cart', JSON.stringify(newList))
+        }
     }
 
     function removeItemToShoppingCart(productId: string) {
