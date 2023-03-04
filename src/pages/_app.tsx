@@ -11,16 +11,31 @@ import logoImg from '../assets/logo.svg'
 import { Container, Header } from '../styles/pages/app'
 import { CartModal } from '../components/CartModal'
 import { ShoppingCartContextProvider } from '../contexts/ShoppingCartContext'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 GlobalStyles()
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { pathname } = useRouter()
 
   return (
     <ShoppingCartContextProvider>
       <Container>
         <Header>
-          <Image src={logoImg} alt="" />
+          {
+            pathname === '/'
+              ?
+              (
+                <Image src={logoImg} alt="" />
+              )
+              :
+              (
+                <Link href='/' title='Página Inicial'>
+                  <Image src={logoImg} alt="" />
+                </Link>
+              )
+          }
 
           <Modal.Root>
             <Modal.Trigger asChild>
