@@ -33,6 +33,7 @@ export function ShoppingCartContextProvider({ children }: ShoppingCartContextPro
     const [cart, setCart] = useState([] as Product[])
     const [cost, setCost] = useState('R$ 0,00')
 
+    // CARREGA O CARRINHO DE COMPRAS SALVO NA LOCAL-STORAGE, SE HOUVER //
     useEffect(() => {
         const storage = localStorage.getItem('@ignite-shop:cart')
 
